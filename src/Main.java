@@ -1,6 +1,9 @@
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.sql.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static HashMap<String,Integer> mpp  = new HashMap<>();
@@ -73,32 +76,32 @@ public class Main {
     }
     static  void Show(String table) {
         try{
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/shop", "root", "Gagan@20");
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT name,price,rating FROM "+table);
-        ResultSetMetaData ResultSetMetaData = rs.getMetaData();
-        int numColumns = ResultSetMetaData.getColumnCount();
-        int[] columnWidths = new int[numColumns];
-        for (int i = 1; i <= numColumns; i++)
-            columnWidths[i-1] = Math.max(ResultSetMetaData.getColumnName(i).length(), ResultSetMetaData.getColumnDisplaySize(i));
-        for (int i = 1; i <= numColumns; i++)
-            System.out.printf("%-" + columnWidths[i-1] + "s", ResultSetMetaData.getColumnName(i));
-        System.out.println();
-        for (int i = 0; i < numColumns; i++){
-            for (int j = 0; j < columnWidths[i]; j++)
-                System.out.print("-");
-            System.out.print("  ");
-        }
-        System.out.println();
-        while (rs.next()) {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/shop", "root", "Gagan@20");
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT name,price,rating FROM "+table);
+            ResultSetMetaData ResultSetMetaData = rs.getMetaData();
+            int numColumns = ResultSetMetaData.getColumnCount();
+            int[] columnWidths = new int[numColumns];
             for (int i = 1; i <= numColumns; i++)
-                System.out.printf("%-" + columnWidths[i-1] + "s", rs.getString(i));
+                columnWidths[i-1] = Math.max(ResultSetMetaData.getColumnName(i).length(), ResultSetMetaData.getColumnDisplaySize(i));
+            for (int i = 1; i <= numColumns; i++)
+                System.out.printf("%-" + columnWidths[i-1] + "s", ResultSetMetaData.getColumnName(i));
             System.out.println();
-        }
+            for (int i = 0; i < numColumns; i++){
+                for (int j = 0; j < columnWidths[i]; j++)
+                    System.out.print("-");
+                System.out.print("  ");
+            }
             System.out.println();
-    }catch (SQLException e) {
-        e.printStackTrace();
+            while (rs.next()) {
+                for (int i = 1; i <= numColumns; i++)
+                    System.out.printf("%-" + columnWidths[i-1] + "s", rs.getString(i));
+                System.out.println();
+            }
+                System.out.println();
+        }catch (SQLException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -130,18 +133,6 @@ public class Main {
             }
         } while (!GoBack);
     }
-    static void Grocery()
-    {
-        SwitchCase("grocery");
-    }
-    static void fashion()
-    {
-        SwitchCase("fashion");
-    }
-    static void beauty()
-    {
-        SwitchCase("beauty");
-    }
     static void buy(){
         try{
             BufferedWriter writer = new BufferedWriter(new FileWriter("myFile.txt"));
@@ -172,15 +163,15 @@ public class Main {
                 switch (choice) {
                     case 0 -> GoBack = true;
                     case 1 -> {
-                        Grocery();
+                        SwitchCase("grocery");
                         Menu();
                     }
                     case 2 -> {
-                        fashion();
+                        SwitchCase("fashion");
                         Menu();
                     }
                     case 3 -> {
-                        beauty();
+                        SwitchCase("beauty");
                         Menu();
                     }
                     default -> {
